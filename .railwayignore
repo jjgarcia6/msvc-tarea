@@ -1,0 +1,41 @@
+# Railway Ignore File
+# Exclude unnecessary files from Railway deployment
+
+# Development files
+*.md
+README.md
+HELP.md
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+*.code-workspace
+
+# Build artifacts (will be built in container)
+target/
+*/target/
+.mvn/
+*/.mvn/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test files
+**/src/test/
+
+# Local development files
+docker-compose.yml
+docker-compose.*.yml
+!docker-compose.railway.yml
+
+# Scripts not needed in production
+build-and-test.sh
+start-dev.*
+
+# Excel files
+*.xlsx
+*.csv

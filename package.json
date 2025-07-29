@@ -1,0 +1,21 @@
+{
+    "name": "abc-motor-microservices",
+    "description": "ABC Motor Multi-Service Application for Railway",
+    "version": "1.0.0",
+    "main": "entrypoint.sh",
+    "scripts": {
+        "start": "./entrypoint.sh",
+        "health": "./health-check.sh"
+    },
+    "engines": {
+        "node": ">=18.0.0"
+    },
+    "railway": {
+        "build": {
+            "command": "echo 'Using Docker build'"
+        },
+        "start": {
+            "command": "./entrypoint.sh"
+        }
+    }
+}
