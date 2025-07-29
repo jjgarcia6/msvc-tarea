@@ -4,7 +4,9 @@
     "version": "1.0.0",
     "main": "entrypoint.sh",
     "scripts": {
-        "start": "./entrypoint.sh",
+        "start": "./railway-debug.sh",
+        "start-simple": "./railway-start.sh",
+        "start-full": "./entrypoint.sh",
         "health": "./health-check.sh"
     },
     "engines": {
@@ -15,7 +17,7 @@
             "command": "echo 'Using Docker build'"
         },
         "start": {
-            "command": "./entrypoint.sh"
+            "command": "./railway-start.sh"
         }
     }
 }

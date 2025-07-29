@@ -81,7 +81,9 @@ RUN apk add --no-cache \
     wget \
     netcat-openbsd \
     procps \
-    dos2unix
+    dos2unix \
+    file \
+    bash
 
 WORKDIR /app
 
@@ -95,11 +97,16 @@ COPY --from=builder /app/msvc-sales/target/msvc-sales-*.jar ./sales.jar
 COPY start-services.sh ./
 COPY health-check.sh ./
 COPY entrypoint.sh ./
+COPY railway-start.sh ./
+COPY railway-debug.sh ./
 
 # Fix line endings and permissions for Railway compatibility
-RUN dos2unix start-services.sh health-check.sh entrypoint.sh 2>/dev/null || true && \
-    chmod +x start-services.sh health-check.sh entrypoint.sh && \
-    ls -la start-services.sh health-check.sh entrypoint.sh
+RUN dos2unix start-services.sh health-check.sh entrypoint.sh railway-start.sh railway-debug.sh 2>/dev/null || true && \
+    chmod +x start-services.sh health-check.sh entrypoint.sh railway-start.sh railway-debug.sh && \
+    ls -la *.sh && \
+    echo "=== Verifying key scripts ===" && \
+    head -3 entrypoint.sh && \
+    head -3 railway-start.sh
 
 # Create logs directory
 RUN mkdir -p logs
@@ -111,5 +118,5 @@ EXPOSE $PORT 8761 8080
 HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
   CMD curl -f http://localhost:${PORT:-8080}/actuator/health || curl -f http://localhost:8761/actuator/health || exit 1
 
-# Start all services - use the new robust entrypoint
-CMD ["/app/entrypoint.sh"]
+# Start all services - use debug script for troubleshooting
+CMD ["/bin/bash", "/app/railway-debug.sh"]
