@@ -1,23 +1,18 @@
 # ==============================================
-# ABC Motor - Multi-Service Dockerfile
+# ABC Motor - Multi-Service Dockerfile (Optimized)
 # Deploys all 4 microservices in a single container
 # ==============================================
 
-FROM openjdk:21-jdk-slim
+FROM openjdk:21-jdk-slim as builder
 
-# Install required packages
+# Install required packages for build
 RUN apt-get update && apt-get install -y \
     curl \
     wget \
-    netcat-openbsd \
-    procps \
     && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
-
-# Create directories for each service
-RUN mkdir -p eureka-server gateway msvc-products msvc-sales
 
 # ==============================================
 # BUILD EUREKA SERVER
@@ -31,8 +26,7 @@ WORKDIR /app/eureka-server
 RUN ./mvnw dependency:go-offline -B
 
 COPY eureka-server/src ./src/
-RUN ./mvnw clean package -DskipTests
-RUN cp target/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
+RUN ./mvnw clean package -DskipTests -q
 
 # ==============================================
 # BUILD GATEWAY
@@ -47,8 +41,7 @@ WORKDIR /app/gateway
 RUN ./mvnw dependency:go-offline -B
 
 COPY gateway/src ./src/
-RUN ./mvnw clean package -DskipTests
-RUN cp target/gateway-0.0.1-SNAPSHOT.jar /app/gateway.jar
+RUN ./mvnw clean package -DskipTests -q
 
 # ==============================================
 # BUILD PRODUCTS SERVICE
@@ -63,8 +56,7 @@ WORKDIR /app/msvc-products
 RUN ./mvnw dependency:go-offline -B
 
 COPY msvc-products/src ./src/
-RUN ./mvnw clean package -DskipTests
-RUN cp target/msvc-products-0.0.1-SNAPSHOT.jar /app/products.jar
+RUN ./mvnw clean package -DskipTests -q
 
 # ==============================================
 # BUILD SALES SERVICE
@@ -79,31 +71,43 @@ WORKDIR /app/msvc-sales
 RUN ./mvnw dependency:go-offline -B
 
 COPY msvc-sales/src ./src/
-RUN ./mvnw clean package -DskipTests
-RUN cp target/msvc-sales-0.0.1-SNAPSHOT.jar /app/sales.jar
+RUN ./mvnw clean package -DskipTests -q
 
 # ==============================================
-# RUNTIME SETUP
+# RUNTIME STAGE (Smaller final image)
 # ==============================================
+FROM openjdk:21-jre-slim
+
+# Install runtime packages
+RUN apt-get update && apt-get install -y \
+    curl \
+    wget \
+    netcat-openbsd \
+    procps \
+    && rm -rf /var/lib/apt/lists/*
+
 WORKDIR /app
 
-# Clean up build directories to reduce image size
-RUN rm -rf eureka-server gateway msvc-products msvc-sales
+# Copy JAR files from builder stage
+COPY --from=builder /app/eureka-server/target/eureka-server-*.jar ./eureka-server.jar
+COPY --from=builder /app/gateway/target/gateway-*.jar ./gateway.jar
+COPY --from=builder /app/msvc-products/target/msvc-products-*.jar ./products.jar
+COPY --from=builder /app/msvc-sales/target/msvc-sales-*.jar ./sales.jar
 
-# Copy startup script
+# Copy startup and health check scripts
 COPY start-services.sh ./
-RUN chmod +x start-services.sh
-
-# Copy health check script
 COPY health-check.sh ./
-RUN chmod +x health-check.sh
+RUN chmod +x start-services.sh health-check.sh
 
-# Expose ports
-EXPOSE 8761 8080 8081 8082
+# Create logs directory
+RUN mkdir -p logs
 
-# Health check for the container
-HEALTHCHECK --interval=60s --timeout=30s --start-period=120s --retries=3 \
-  CMD ./health-check.sh
+# Railway uses $PORT, but we also expose common ports
+EXPOSE $PORT 8761 8080
+
+# Health check optimized for Railway
+HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
+  CMD curl -f http://localhost:8761/actuator/health || exit 1
 
 # Start all services
 CMD ["./start-services.sh"]
