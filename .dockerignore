@@ -1,0 +1,53 @@
+# Docker ignore file for ABC Motor project
+
+# Git files
+.git
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.iml
+*.code-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+
+# Test data
+*.xlsx
+*.csv
+ProductsList*.csv
+ProductsList*.xlsx
+
+# Local development files
+docker-compose.yml
+docker-compose.*.yml
+!docker-compose.railway.yml
+
+# Build artifacts that will be created in Docker
+target/
+*/target/
+.mvn/wrapper/maven-wrapper.jar
+
+# Node modules (if any)
+node_modules/
+
+# Temporary files
+*.tmp
+*.log
+logs/
+
+# Railway specific files we don't need in build context
+railway.toml
+.railwayignore
+
+# Backup files
+*.bak
+*.old
+Dockerfile.old
+package-fixed.json
