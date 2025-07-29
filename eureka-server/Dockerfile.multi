@@ -1,0 +1,52 @@
+# Multi-service Dockerfile (NO recomendado para producción)
+FROM openjdk:21-jdk-slim as base
+
+# Install Maven
+RUN apt-get update && apt-get install -y maven
+
+WORKDIR /app
+
+# ============ EUREKA SERVER ============
+FROM base as eureka-builder
+COPY eureka-server/pom.xml ./eureka-server/
+COPY eureka-server/src ./eureka-server/src/
+WORKDIR /app/eureka-server
+RUN mvn clean package -DskipTests
+
+# ============ GATEWAY ============
+FROM base as gateway-builder
+COPY gateway/pom.xml ./gateway/
+COPY gateway/src ./gateway/src/
+WORKDIR /app/gateway
+RUN mvn clean package -DskipTests
+
+# ============ PRODUCTS ============
+FROM base as products-builder
+COPY msvc-products/pom.xml ./msvc-products/
+COPY msvc-products/src ./msvc-products/src/
+WORKDIR /app/msvc-products
+RUN mvn clean package -DskipTests
+
+# ============ SALES ============
+FROM base as sales-builder
+COPY msvc-sales/pom.xml ./msvc-sales/
+COPY msvc-sales/src ./msvc-sales/src/
+WORKDIR /app/msvc-sales
+RUN mvn clean package -DskipTests
+
+# ============ RUNTIME ============
+FROM openjdk:21-jre-slim
+
+# Copy all JARs
+COPY --from=eureka-builder /app/eureka-server/target/eureka-server-0.0.1-SNAPSHOT.jar /app/eureka-server.jar
+COPY --from=gateway-builder /app/gateway/target/gateway-0.0.1-SNAPSHOT.jar /app/gateway.jar
+COPY --from=products-builder /app/msvc-products/target/msvc-products-0.0.1-SNAPSHOT.jar /app/products.jar
+COPY --from=sales-builder /app/msvc-sales/target/msvc-sales-0.0.1-SNAPSHOT.jar /app/sales.jar
+
+# Copy startup script
+COPY start-services.sh /app/
+RUN chmod +x /app/start-services.sh
+
+EXPOSE 8761 8080
+
+CMD ["/app/start-services.sh"]

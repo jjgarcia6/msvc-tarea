@@ -1,0 +1,12 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: msvc-products
+          uri: lb://msvc-products
+          predicates:
+            - Path=/api/products/**
+        - id: msvc-sales
+          uri: lb://msvc-sales
+          predicates:
+            - Path=/api/item/**       

@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  eureka-server:
+    build:
+      context: ./eureka-server
+      dockerfile: Dockerfile
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    networks:
+      - microservices-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8761/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - microservices-network
+
+  msvc-products:
+    build:
+      context: ./msvc-products
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_USERNAME=${MONGODB_USERNAME}
+      - MONGODB_PASSWORD=${MONGODB_PASSWORD}
+      - MONGODB_CLUSTER=${MONGODB_CLUSTER}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    deploy:
+      replicas: 2
+
+  msvc-sales:
+    build:
+      context: ./msvc-sales
+      dockerfile: Dockerfile
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - EUREKA_URL=http://eureka-server:8761/eureka/
+    depends_on:
+      eureka-server:
+        condition: service_healthy
+    networks:
+      - microservices-network
+    deploy:
+      replicas: 2
+
+networks:
+  microservices-network:
+    driver: bridge
+
+volumes:
+  eureka-data:

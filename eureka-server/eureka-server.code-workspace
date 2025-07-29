@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../msvc-products"
+		},
+		{
+			"path": "../msvc-sales"
+		},
+		{
+			"name": "gateway",
+			"path": "../gateway"
+		}
+	],
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive",
+		"java.compile.nullAnalysis.mode": "disabled"
+	}
+}

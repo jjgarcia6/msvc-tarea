@@ -1,0 +1,31 @@
+id,name,description,price,stock,image,platforms,genres,discount,developer,publisher,release_date
+1,15508730000,LLANTA 185/65R15 88H POWERCONTACT 2,96.31,41,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-107932638-28795857.jpg,LLANTA,PLT,0,CONTINENTAL,,04/02/2025
+2,04502070000,LLANTA 245/70R16 107S FR GRAB ATX,99.83,31,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-aj4xo-30944611.jpg,LLANTA,PLT,7,GENERAL TIRE,,22/08/2025
+3,04516220000,LLANTA 205/75R16C 113/111R VANC100,75.26,42,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-artawkrn-20256374.jpg,LLANTA,PLT,0,CONTINENTAL,,16/10/2025
+4,15409050000,LLANTA 185/65R14 86T BRAVURIS 5HM,35.81,38,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-bertellifotografia-17042858.jpg,LLANTA,PLT,0,BARUM,,04/02/2025
+5,15409010000,LLANTA 175/70R13 82TBRAVURIS 5HM,32.12,17,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-bradikan-31043183.jpg,LLANTA,PLT,0,BARUM,,30/05/2025
+6,15409040000,LLANTA 185/60R14 BARUM BRAVURIS,35.27,10,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-chris-f-38966-8419076.jpg,LLANTA,PLT,5,BARUM,,28/10/2025
+7,15506060000,LLANTA 205/55R16 91V FR GMAXRS,49.82,23,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-elpsyx-9207032.jpg,LLANTA,PLT,5,GENERAL TIRE,,03/01/2025
+8,15508610000,LLANTA 205/55R16 91V FR POWC 2,43.24,32,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-tinchflicks-29054547.jpg,LLANTA,PLT,6,CONTINENTAL,,24/12/2025
+9,15409460000,LLANTA 195/55R15 BRAVURIS 5HM,65.28,33,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-thapelo-boateng-233479440-14583147.jpg,LLANTA,PLT,0,BARUM,,10/06/2025
+10,15409080000,LLANTA 185/70R14 BRAVURIS 5HM,59.87,16,https://raw.githubusercontent.com/jjgarcia6/products_images/main/llantas/pexels-rodrigo-chable-380091428-18502451.jpg,LLANTA,PLT,4,BARUM,,21/11/2025
+59,T12052,BATERIA N120 SHD T4,30.17,44,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-tami-19499399.jpg,BATERIA,BATERIAS PESADOS,0,BOSCH,,14/12/2025
+60,T15042,BATERIA N150 HD T4,46.96,32,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-shvetsa-4315570.jpg,BATERIA,BATERIAS PESADOS,4,BOSCH,,18/01/2025
+61,T10042,BATERIA N100 HD T4,20.57,37,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-maltelu-2244746.jpg,BATERIA,BATERIAS PESADOS,0,BOSCH,,06/01/2025
+63,T03042,BATERIA 30H HD T4,38.27,35,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-lumierestudiomx-4116172.jpg,BATERIA,BATERIAS PESADOS,0,BOSCH,,11/08/2025
+64,T03144,BATERIA 31 HD T4,24.99,33,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-cottonbro-7541358.jpg,BATERIA,BATERIAS PESADOS,0,BOSCH,,19/09/2025
+65,704834,Bateria 48 HP S5 Sellada,82.6,26,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-19x14-8478233.jpg,BATERIA,BATERIAS LIVIANOS,0,BOSCH,,03/04/2025
+66,603436,BATERIA  34 HP I S4,102.4,21,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-tami-19499399.jpg,BATERIA,BATERIAS LIVIANOS,0,BOSCH,,12/09/2025
+67,614026,BATERIA N40 FE I S4,81.42,17,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-shvetsa-4315570.jpg,BATERIA,BATERIAS LIVIANOS,0,BOSCH,,25/10/2025
+68,604236,BATERIA  42 HP I S4,99.69,34,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-maltelu-2244746.jpg,BATERIA,BATERIAS LIVIANOS,0,BOSCH,,22/01/2025
+69,7B6548,BATERIA B65 MP I S5,48.57,26,https://raw.githubusercontent.com/jjgarcia6/products_images/main/baterias/pexels-lumierestudiomx-4116224.jpg,BATERIA,BATERIAS LIVIANOS,0,BOSCH,,09/08/2025
+84,PTAUDID15400100,VALVODIESEL 15W40 (GL),76.33,31,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-lumierestudiomx-4116207.jpg,ACEITE,ACEITE,0,VALVOLINE,,10/03/2025
+85,PTAUGAP10300100,VALVOLINE PREMIUM,80.27,34,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-artempodrez-8985618.jpg,ACEITE,ACEITE,0,VALVOLINE,,09/07/2025
+86,PTAUGAS05300025,PREMIUM PROTECTION,99.36,14,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-artempodrez-8985616.jpg,ACEITE,ACEITE,0,VALVOLINE,,21/01/2025
+87,PTAUDID15400250,VALVODIESEL 15W40,104,33,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-artempodrez-8985455.jpg,ACEITE,ACEITE,3,VALVOLINE,,06/05/2025
+88,PTAIPY000884544,PREMIUM PROTECTION,91.95,16,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-19x14-8478223.jpg,ACEITE,ACEITE,0,VALVOLINE,,01/07/2025
+89,PTAUDIB154K0500,BLENDPOWER SAE,88.09,23,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-19x14-8478207.jpg,ACEITE,ACEITE,0,VALVOLINE,,25/04/2025
+90,PTAUDIB154K0025,BLENDPOWER SAE,20.28,27,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-lumierestudiomx-4116207.jpg,ACEITE,ACEITE,0,VALVOLINE,,02/12/2025
+91,PTAUDIB154K0100,BLENDPOWER SAE,49.08,24,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-artempodrez-8985618.jpg,ACEITE,ACEITE,0,VALVOLINE,,21/11/2025
+92,PTAUGAR10SM0100,VALVOLINE RACING,28.99,25,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-artempodrez-8985616.jpg,ACEITE,ACEITE,3,VALVOLINE,,17/11/2025
+102,PTAUGAC20500100,CLASSIC SAE 20W50 SP GL,96.2,20,https://raw.githubusercontent.com/jjgarcia6/products_images/main/aceites/pexels-lumierestudiomx-4116207.jpg,ACEITE,ACEITE,0,VALVOLINE,,05/05/2025
