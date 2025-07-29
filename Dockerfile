@@ -1,6 +1,18 @@
 # ==============================================
-# ABC Motor - Multi-Service Dockerfile (Fixed)
-# Deploys all 4 microservices in a single container
+# ABC Motor - Multi-Service Dockerfile (Fixed# Copy startup and health check scripts
+COPY start-services.sh ./
+COPY health-check.sh ./
+COPY entrypoint.sh ./
+COPY railway-start.sh ./
+COPY railway-debug.sh ./
+COPY railway-production.sh ./
+
+# Fix line endings and permissions for Railway compatibility
+RUN dos2unix start-services.sh health-check.sh entrypoint.sh railway-start.sh railway-debug.sh railway-production.sh 2>/dev/null || true && \
+    chmod +x start-services.sh health-check.sh entrypoint.sh railway-start.sh railway-debug.sh railway-production.sh && \
+    ls -la *.sh && \
+    echo "=== Verifying key scripts ===" && \
+    head -3 railway-production.shall 4 microservices in a single container
 # ==============================================
 
 FROM eclipse-temurin:21-jdk-alpine as builder
@@ -83,7 +95,8 @@ RUN apk add --no-cache \
     procps \
     dos2unix \
     file \
-    bash
+    bash \
+    net-tools
 
 WORKDIR /app
 
@@ -114,9 +127,9 @@ RUN mkdir -p logs
 # Railway uses $PORT, but we also expose common ports
 EXPOSE $PORT 8761 8080
 
-# Health check optimized for Railway  
-HEALTHCHECK --interval=30s --timeout=10s --start-period=90s --retries=3 \
-  CMD curl -f http://localhost:${PORT:-8080}/actuator/health || curl -f http://localhost:8761/actuator/health || exit 1
+# Health check optimized for Railway - longer timeout for startup
+HEALTHCHECK --interval=45s --timeout=30s --start-period=120s --retries=5 \
+  CMD curl -f http://localhost:${PORT:-8080}/actuator/health || exit 1
 
-# Start all services - use debug script for troubleshooting
-CMD ["/bin/bash", "/app/railway-debug.sh"]
+# Start all services - use production script with diagnostics
+CMD ["/bin/bash", "/app/railway-production.sh"]

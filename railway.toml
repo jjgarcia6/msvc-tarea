@@ -3,13 +3,15 @@ builder = "dockerfile"
 
 [deploy]
 healthcheckPath = "/actuator/health"
-healthcheckTimeout = 30
+healthcheckTimeout = 120
 restartPolicyType = "on_failure"
 restartPolicyMaxRetries = 3
+startCommand = "./railway-production.sh"
 
 [environments.production]
 EUREKA_PORT = "8761"
 SPRING_PROFILES_ACTIVE = "production"
+JAVA_OPTS = "-Xmx512m -Djava.security.egd=file:/dev/./urandom"
 
 [environments.production.variables]
 PORT = { default = "8080" }
