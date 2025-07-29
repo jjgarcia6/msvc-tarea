@@ -11,18 +11,29 @@ echo "Process ID: $$"
 # Environment setup
 export EUREKA_PORT=${EUREKA_PORT:-8761}
 export GATEWAY_PORT=${PORT:-8080}
+export PRODUCTS_PORT=${PRODUCTS_PORT:-8081}
+export SALES_PORT=${SALES_PORT:-8082}
 export JAVA_OPTS="-Xmx512m -Djava.security.egd=file:/dev/./urandom"
+
+# MongoDB configuration
+export MONGODB_USERNAME=${MONGODB_USERNAME:-""}
+export MONGODB_PASSWORD=${MONGODB_PASSWORD:-""}
+export MONGODB_CLUSTER=${MONGODB_CLUSTER:-""}
+export MONGODB_DATABASE=${MONGODB_DATABASE:-"products_db"}
 
 echo "Configuration:"
 echo "- EUREKA_PORT: $EUREKA_PORT"
 echo "- GATEWAY_PORT: $GATEWAY_PORT"
+echo "- PRODUCTS_PORT: $PRODUCTS_PORT"
+echo "- SALES_PORT: $SALES_PORT"
 echo "- PORT (Railway): $PORT"
 echo "- JAVA_OPTS: $JAVA_OPTS"
+echo "- MongoDB configured: $([ -n "$MONGODB_USERNAME" ] && echo "Yes" || echo "No")"
 echo ""
 
 # Verify JAR files
 echo "=== Verifying JAR files ==="
-for jar in eureka-server.jar gateway.jar; do
+for jar in eureka-server.jar gateway.jar products.jar sales.jar; do
     if [ -f "$jar" ]; then
         echo "✓ $jar exists ($(du -h $jar | cut -f1))"
     else
@@ -87,6 +98,14 @@ cleanup() {
         echo "Stopping Eureka (PID: $EUREKA_PID)"
         kill $EUREKA_PID 2>/dev/null || true
     fi
+    if [ ! -z "$PRODUCTS_PID" ]; then
+        echo "Stopping Products Service (PID: $PRODUCTS_PID)"
+        kill $PRODUCTS_PID 2>/dev/null || true
+    fi
+    if [ ! -z "$SALES_PID" ]; then
+        echo "Stopping Sales Service (PID: $SALES_PID)"
+        kill $SALES_PID 2>/dev/null || true
+    fi
     exit 0
 }
 
@@ -107,6 +126,38 @@ if ! wait_for_service $EUREKA_PORT "Eureka" EUREKA_PID; then
     echo "Failed to start Eureka Server"
     exit 1
 fi
+
+# Start Products Service (background) if MongoDB is configured
+if [ -n "$MONGODB_USERNAME" ] && [ -n "$MONGODB_PASSWORD" ]; then
+    echo "=== Starting Products Service ==="
+    java -jar $JAVA_OPTS \
+        -Dserver.port=$PRODUCTS_PORT \
+        -Dspring.profiles.active=production \
+        -Deureka.client.service-url.defaultZone=http://localhost:$EUREKA_PORT/eureka/ \
+        -Dspring.data.mongodb.username=$MONGODB_USERNAME \
+        -Dspring.data.mongodb.password=$MONGODB_PASSWORD \
+        -Dspring.data.mongodb.host=$MONGODB_CLUSTER \
+        -Dspring.data.mongodb.database=$MONGODB_DATABASE \
+        products.jar > logs/products.log 2>&1 &
+    PRODUCTS_PID=$!
+    echo "Products Service started with PID: $PRODUCTS_PID"
+else
+    echo "=== Skipping Products Service (MongoDB not configured) ==="
+fi
+
+# Start Sales Service (background)
+echo "=== Starting Sales Service ==="
+java -jar $JAVA_OPTS \
+    -Dserver.port=$SALES_PORT \
+    -Dspring.profiles.active=production \
+    -Deureka.client.service-url.defaultZone=http://localhost:$EUREKA_PORT/eureka/ \
+    sales.jar > logs/sales.log 2>&1 &
+SALES_PID=$!
+echo "Sales Service started with PID: $SALES_PID"
+
+# Give services time to register with Eureka
+echo "Waiting 30 seconds for services to register with Eureka..."
+sleep 30
 
 echo "=== Starting Gateway ==="
 echo "Gateway will be the main process (foreground)"

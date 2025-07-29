@@ -8,6 +8,11 @@ HELP.md
 .git/
 .gitignore
 
+# Environment files (configure these in Railway dashboard)
+.env
+*.env
+.env.*
+
 # IDE files
 .vscode/
 .idea/
