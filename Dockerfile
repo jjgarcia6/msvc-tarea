@@ -1,15 +1,12 @@
 # ==============================================
-# ABC Motor - Multi-Service Dockerfile (Optimized)
+# ABC Motor - Multi-Service Dockerfile (Fixed)
 # Deploys all 4 microservices in a single container
 # ==============================================
 
-FROM openjdk:21-jdk-slim as builder
+FROM eclipse-temurin:21-jdk-alpine as builder
 
 # Install required packages for build
-RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache curl wget
 
 # Set working directory
 WORKDIR /app
@@ -76,15 +73,14 @@ RUN ./mvnw clean package -DskipTests -q
 # ==============================================
 # RUNTIME STAGE (Smaller final image)
 # ==============================================
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 
-# Install runtime packages
-RUN apt-get update && apt-get install -y \
+# Install runtime packages (Alpine Linux)
+RUN apk add --no-cache \
     curl \
     wget \
     netcat-openbsd \
-    procps \
-    && rm -rf /var/lib/apt/lists/*
+    procps
 
 WORKDIR /app
 
